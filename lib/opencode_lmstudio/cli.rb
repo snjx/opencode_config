@@ -36,6 +36,8 @@ module OpencodeLmstudio
     def fetch_and_update(client, config)
       puts "Fetching models from #{client.base_url}..."
       model_ids = client.fetch_models
+      raise "No models returned from LM Studio" if model_ids.empty?
+
       puts "Found #{model_ids.size} model(s)"
       default_model = config.update_models(model_ids, client.base_url, default_model: @options[:model])
       print_result(config.path, client.base_url, default_model, model_ids)

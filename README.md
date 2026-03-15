@@ -1,6 +1,6 @@
 # opencode_lmstudio
 
-LM Studio のモデル一覧を取得して opencode の設定を対話的に切り替えるコマンドラインツール。
+LM Studio のモデル一覧を取得して opencode の設定を更新するコマンドラインツール。
 
 ## インストール
 
@@ -23,15 +23,17 @@ gem install opencode_lmstudio-*.gem
 ## 使い方
 
 ```bash
-# 対話的にモデルを選択
+# モデル一覧を取得して opencode.jsonc を更新する
 opencode-lmstudio
 
-# モデルを直接指定
+# デフォルトモデルを指定して更新
 opencode-lmstudio --model qwen/qwen3-coder-30b
 
 # ホスト・ポートを指定
 opencode-lmstudio --host 192.168.1.100 --port 1234
 ```
+
+実行後に opencode を起動して `/models` コマンドで取得したモデル一覧から選択できます。
 
 ## 環境変数
 
@@ -47,16 +49,7 @@ opencode-lmstudio --host 192.168.1.100 --port 1234
 -H, --host HOST      LM Studio ホスト
 -p, --port PORT      LM Studio ポート
 -c, --config PATH    opencode.jsonc のパス
--m, --model MODEL    モデルを直接指定（対話なし）
+-m, --model MODEL    デフォルトモデルを指定
 -v, --version        バージョン表示
 -h, --help           ヘルプ表示
 ```
-
-## キー操作（対話モード）
-
-| キー | 動作 |
-|------|------|
-| `↑` / `k` | 上へ移動 |
-| `↓` / `j` | 下へ移動 |
-| `Enter` | 選択して適用 |
-| `q` / `Ctrl+C` | キャンセル |

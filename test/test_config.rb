@@ -75,6 +75,45 @@ module OpencodeLmstudio
       assert File.exist?(@path)
     end
 
+    def test_update_models_falls_back_when_model_not_in_list
+      File.write(@path, JSON.generate({ "model" => "old-model" }))
+      _out, err = capture_io do
+        result = @config.update_models(%w[model-a model-b], "http://localhost:1234/v1")
+        assert_equal "model-a", result
+      end
+      assert_match "old-model", err
+    end
+
+    def test_update_models_explicit_model_not_in_list_falls_back
+      _out, err = capture_io do
+        result = @config.update_models(%w[model-a model-b], "http://localhost:1234/v1", default_model: "missing")
+        assert_equal "model-a", result
+      end
+      assert_match "missing", err
+    end
+
+    # rubocop:disable Metrics/MethodLength
+    def test_update_models_preserves_extra_lmstudio_keys
+      existing = {
+        "provider" => {
+          "lmstudio" => {
+            "name" => "LM Studio",
+            "npm" => "@ai-sdk/openai-compatible",
+            "apiKey" => "secret",
+            "options" => { "baseURL" => "http://old:1234/v1", "timeout" => 30 }
+          }
+        }
+      }
+      File.write(@path, JSON.generate(existing))
+      @config.update_models(["model-a"], "http://new:1234/v1")
+      data = JSON.parse(File.read(@path))
+      lmstudio = data["provider"]["lmstudio"]
+      assert_equal "secret", lmstudio["apiKey"]
+      assert_equal 30, lmstudio["options"]["timeout"]
+      assert_equal "http://new:1234/v1", lmstudio["options"]["baseURL"]
+    end
+    # rubocop:enable Metrics/MethodLength
+
     def test_jsonc_url_in_string_is_not_stripped_as_comment
       # "http://..." contains "//" but must not be treated as a comment
       File.write(@path, JSON.generate({ "model" => "http://example.com" }))

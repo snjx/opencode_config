@@ -17,7 +17,7 @@ module OpencodeLmstudio
     # Updates provider.lmstudio.models with all given model IDs and returns the model set as default.
     def update_models(model_ids, base_url, default_model: nil)
       config = read
-      model = default_model || config["model"] || model_ids.first
+      model = resolve_model(model_ids, default_model || config["model"])
       config["model"] = model
       config["provider"] ||= {}
       config["provider"]["lmstudio"] = build_lmstudio_section(model_ids, base_url, config["provider"]["lmstudio"])
@@ -27,15 +27,25 @@ module OpencodeLmstudio
 
     private
 
+    def resolve_model(model_ids, preferred)
+      if preferred && model_ids.include?(preferred)
+        preferred
+      else
+        warn "Warning: model '#{preferred}' not found, falling back to '#{model_ids.first}'" if preferred
+        model_ids.first
+      end
+    end
+
     def build_lmstudio_section(model_ids, base_url, existing = nil)
       existing ||= {}
       models = model_ids.each_with_object({}) { |id, h| h[id] = { "name" => id } }
-      {
+      existing_options = existing["options"] || {}
+      existing.merge(
         "name" => existing["name"] || "LM Studio",
         "npm" => existing["npm"] || "@ai-sdk/openai-compatible",
         "models" => models,
-        "options" => { "baseURL" => base_url }
-      }
+        "options" => existing_options.merge("baseURL" => base_url)
+      )
     end
 
     def read

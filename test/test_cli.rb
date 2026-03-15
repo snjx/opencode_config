@@ -65,6 +65,22 @@ module OpencodeLmstudio
     end
     # rubocop:enable Metrics/MethodLength
 
+    # rubocop:disable Metrics/MethodLength
+    def test_run_raises_when_no_models_returned
+      Client.stub(:new, lambda { |host:, port:|
+        obj = Client.allocate
+        obj.define_singleton_method(:fetch_models) { [] }
+        obj.define_singleton_method(:base_url) { "http://#{host}:#{port}/v1" }
+        obj
+      }) do
+        _out, err = capture_io do
+          assert_raises(SystemExit) { CLI.new(["-c", @config_path]).run }
+        end
+        assert_match "No models returned", err
+      end
+    end
+    # rubocop:enable Metrics/MethodLength
+
     def test_run_uses_env_host
       ENV["LMSTUDIO_HOST"] = "1.2.3.4"
       cli = CLI.new(["-c", @config_path])
