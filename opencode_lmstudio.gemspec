@@ -4,8 +4,8 @@ Gem::Specification.new do |spec|
   spec.name          = "opencode_lmstudio"
   spec.version       = OpencodeLmstudio::VERSION
   spec.authors       = ["shinjinakashima"]
-  spec.summary       = "CLI tool to switch LM Studio models in opencode config"
-  spec.description   = "Fetches available models from LM Studio and updates opencode.jsonc interactively"
+  spec.summary       = "CLI tool to sync LM Studio models into opencode config"
+  spec.description   = "Fetches available models from LM Studio and updates opencode.jsonc"
   spec.homepage      = "https://github.com/shinjinakashima/opencode_lmstudio"
   spec.license       = "MIT"
 
