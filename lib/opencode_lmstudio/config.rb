@@ -17,7 +17,7 @@ module OpencodeLmstudio
     # Updates provider.lmstudio.models with all given model IDs and returns the model set as default.
     def update_models(model_ids, base_url, default_model: nil)
       config = read
-      model = resolve_model(model_ids, default_model || config["model"])
+      model = default_model ? resolve_model(model_ids, default_model) : (config["model"] || model_ids.first)
       config["model"] = model
       config["provider"] ||= {}
       config["provider"]["lmstudio"] = build_lmstudio_section(model_ids, base_url, config["provider"]["lmstudio"])

@@ -75,13 +75,11 @@ module OpencodeLmstudio
       assert File.exist?(@path)
     end
 
-    def test_update_models_falls_back_when_model_not_in_list
-      File.write(@path, JSON.generate({ "model" => "old-model" }))
-      _out, err = capture_io do
-        result = @config.update_models(%w[model-a model-b], "http://localhost:1234/v1")
-        assert_equal "model-a", result
-      end
-      assert_match "old-model", err
+    def test_update_models_preserves_existing_model_even_if_not_in_list
+      # --model 未指定時は他プロバイダのモデルを含む既存設定を上書きしない
+      File.write(@path, JSON.generate({ "model" => "anthropic/claude-3" }))
+      result = @config.update_models(%w[model-a model-b], "http://localhost:1234/v1")
+      assert_equal "anthropic/claude-3", result
     end
 
     def test_update_models_explicit_model_not_in_list_falls_back
