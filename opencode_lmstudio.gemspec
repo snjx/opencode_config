@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["shinjinakashima"]
   spec.summary       = "CLI tool to sync LM Studio models into opencode config"
   spec.description   = "Fetches available models from LM Studio and updates opencode.jsonc"
-  spec.homepage      = "https://github.com/shinjinakashima/opencode_lmstudio"
+  spec.homepage      = "https://github.com/snjx/opencode_lmstudio"
   spec.license       = "MIT"
 
   spec.required_ruby_version = ">= 3.0"
