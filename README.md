@@ -8,13 +8,13 @@ LM Studio のモデル一覧を取得して opencode の設定を更新するコ
 
 ```bash
 gem install specific_install
-gem specific_install https://github.com/snjx/opencode_lmstudio
+gem specific_install https://github.com/snjx/opencode_config
 ```
 
 ### または clone してインストール
 
 ```bash
-git clone https://github.com/snjx/opencode_lmstudio
+git clone https://github.com/snjx/opencode_config
 cd opencode_lmstudio
 gem build opencode_lmstudio.gemspec
 gem install opencode_lmstudio-*.gem
